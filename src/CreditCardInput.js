@@ -9,9 +9,10 @@ import ReactNative, {
   Dimensions,
   TextInput,
   ViewPropTypes,
+  Image,
 } from "react-native";
 
-import CreditCard from "./CardView";
+import Icons from "./Icons";
 import CCInput from "./CCInput";
 import { InjectedProps } from "./connectToState";
 
@@ -111,6 +112,12 @@ export default class CreditCardInput extends Component {
       });
   }
 
+  _iconToShow = () => {
+    const { focused, values: { type } } = this.props;
+    if (type) return type;
+    return "placeholder";
+  }
+
   _inputProps = field => {
     const {
       inputStyle, labelStyle, validColor, invalidColor, placeholderColor,
@@ -152,6 +159,10 @@ export default class CreditCardInput extends Component {
           <CCInput {...this._inputProps("number")}
             keyboardType="numeric"
             containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} />
+            </CCInput>
+            <View testID='anchor' style={{position: 'relative', width:'100%', height:0 ,overflow:'visible'}} >
+              <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 42, height: 27,}} source={Icons[this._iconToShow()]} />
+            </View>
           <CCInput {...this._inputProps("expiry")}
             keyboardType="numeric"
             containerStyle={[s.inputContainer, inputContainerStyle, { width: EXPIRY_INPUT_WIDTH }]} />
@@ -159,9 +170,12 @@ export default class CreditCardInput extends Component {
             <CCInput {...this._inputProps("cvc")}
               keyboardType="numeric"
               containerStyle={[s.inputContainer, inputContainerStyle, { width: CVC_INPUT_WIDTH }]} /> }
+              <View testID='anchor' style={{position: 'relative', width:'100%', height: 0, overflow: 'visible'}} >
+                <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 42, height: 27,}} source={Icons['cvc']} />
+              </View>
           { requiresName &&
             <CCInput {...this._inputProps("name")}
-              containerStyle={[s.inputContainer, inputContainerStyle, { width: NAME_INPUT_WIDTH }]} /> }
+              containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} /> }
           { requiresPostalCode &&
             <CCInput {...this._inputProps("postalCode")}
               keyboardType="numeric"
