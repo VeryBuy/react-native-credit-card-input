@@ -51,6 +51,11 @@ export default class CreditCardInput extends Component {
 
     validColor: PropTypes.string,
     invalidColor: PropTypes.string,
+    invalidMessage: {
+      number: PropTypes.string,
+      expiry: PropTypes.string,
+      cvc: PropTypes.string,
+    },
     placeholderColor: PropTypes.string,
 
     cardImageFront: PropTypes.number,
@@ -147,6 +152,7 @@ export default class CreditCardInput extends Component {
     const {
       inputContainerStyle,
       allowScroll, requiresName, requiresCVC, requiresPostalCode,
+      status, invalidMessage,
     } = this.props;
 
     return (
@@ -158,21 +164,31 @@ export default class CreditCardInput extends Component {
           style={s.form}>
           <CCInput {...this._inputProps("number")}
             keyboardType="numeric"
-            containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} />
+            containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH, borderBottomColor: status['number'] === "invalid" ? "#FC6068" : "#E1E3E6" }]} >
             </CCInput>
             <View testID='anchor' style={{position: 'relative', width:'100%', height:0 ,overflow:'visible'}} >
               <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 42, height: 27,}} source={Icons[this._iconToShow()]} />
             </View>
+            {status['number'] === "invalid" && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.number}</Text>}
           <CCInput {...this._inputProps("expiry")}
             keyboardType="numeric"
-            containerStyle={[s.inputContainer, inputContainerStyle, { width: EXPIRY_INPUT_WIDTH }]} />
+            containerStyle={[
+              s.inputContainer,
+              inputContainerStyle,
+              {
+                width: CARD_NUMBER_INPUT_WIDTH,
+                borderBottomColor: status['expiry'] === "invalid" ? "#FC6068" : "#E1E3E6" }]
+              }
+            />
+            {status['expiry'] === "invalid" && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.expiry}</Text>}
           { requiresCVC &&
             <CCInput {...this._inputProps("cvc")}
               keyboardType="numeric"
-              containerStyle={[s.inputContainer, inputContainerStyle, { width: CVC_INPUT_WIDTH }]} /> }
+              containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH, borderBottomColor: status['cvc'] === "invalid" ? "#FC6068" : "white"}]} /> }
               <View testID='anchor' style={{position: 'relative', width:'100%', height: 0, overflow: 'visible'}} >
                 <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 42, height: 27,}} source={Icons['cvc']} />
               </View>
+              {status['cvc'] === "invalid" && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.cvc}</Text>}
           { requiresName &&
             <CCInput {...this._inputProps("name")}
               containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} /> }
