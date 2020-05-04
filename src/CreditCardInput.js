@@ -18,26 +18,22 @@ import { InjectedProps } from "./connectToState";
 const s = StyleSheet.create({
   container: {
     alignItems: "center",
+    paddingHorizontal: 20,
+    backgroundColor: 'white'
   },
   form: {
-    marginTop: 20,
   },
   inputContainer: {
-    marginLeft: 20,
   },
   inputLabel: {
     fontWeight: "bold",
   },
   input: {
-    height: 40,
+    height: 50,
   },
 });
 
-const CVC_INPUT_WIDTH = 70;
-const EXPIRY_INPUT_WIDTH = CVC_INPUT_WIDTH;
-const CARD_NUMBER_INPUT_WIDTH_OFFSET = 40;
-const CARD_NUMBER_INPUT_WIDTH = Dimensions.get("window").width - EXPIRY_INPUT_WIDTH - CARD_NUMBER_INPUT_WIDTH_OFFSET;
-const NAME_INPUT_WIDTH = CARD_NUMBER_INPUT_WIDTH;
+const CARD_NUMBER_INPUT_WIDTH = Dimensions.get("window").width;
 const PREVIOUS_FIELD_OFFSET = 40;
 const POSTAL_CODE_INPUT_WIDTH = 120;
 
@@ -85,10 +81,11 @@ export default class CreditCardInput extends Component {
     },
     inputContainerStyle: {
       borderBottomWidth: 1,
-      borderBottomColor: "black",
+      borderBottomColor: "#E1E3E6",
+
     },
     validColor: "",
-    invalidColor: "red",
+    invalidColor: "#FC6068",
     placeholderColor: "gray",
     allowScroll: false,
     additionalInputsProps: {},
@@ -141,27 +138,13 @@ export default class CreditCardInput extends Component {
 
   render() {
     const {
-      cardImageFront, cardImageBack, inputContainerStyle,
-      values: { number, expiry, cvc, name, type }, focused,
+      inputContainerStyle,
       allowScroll, requiresName, requiresCVC, requiresPostalCode,
-      cardScale, cardFontFamily, cardBrandIcons,
     } = this.props;
 
     return (
       <View style={s.container}>
-        <CreditCard focused={focused}
-          brand={type}
-          scale={cardScale}
-          fontFamily={cardFontFamily}
-          imageFront={cardImageFront}
-          imageBack={cardImageBack}
-          customIcons={cardBrandIcons}
-          name={requiresName ? name : " "}
-          number={number}
-          expiry={expiry}
-          cvc={cvc} />
         <ScrollView ref="Form"
-          horizontal
           keyboardShouldPersistTaps="always"
           scrollEnabled={allowScroll}
           showsHorizontalScrollIndicator={false}
