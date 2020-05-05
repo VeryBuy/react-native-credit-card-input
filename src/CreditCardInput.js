@@ -51,11 +51,11 @@ export default class CreditCardInput extends Component {
 
     validColor: PropTypes.string,
     invalidColor: PropTypes.string,
-    invalidMessage: {
+    invalidMessage: PropTypes.shape({
       number: PropTypes.string,
       expiry: PropTypes.string,
       cvc: PropTypes.string,
-    },
+    }),
     placeholderColor: PropTypes.string,
 
     cardImageFront: PropTypes.number,
