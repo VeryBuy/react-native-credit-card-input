@@ -65,8 +65,12 @@ export default class CreditCardInput extends Component {
     cardBrandIcons: PropTypes.object,
 
     allowScroll: PropTypes.bool,
-
     additionalInputsProps: PropTypes.objectOf(PropTypes.shape(TextInput.propTypes)),
+    hasTapPayError: PropTypes.shape({
+      number: PropTypes.string,
+      expiry: PropTypes.string,
+      cvc: PropTypes.string,
+    }),
   };
 
   static defaultProps = {
@@ -95,6 +99,11 @@ export default class CreditCardInput extends Component {
     placeholderColor: "gray",
     allowScroll: false,
     additionalInputsProps: {},
+    hasTapPayError: {
+      number: false,
+      expiry: false,
+      cvc: false,
+    }
   };
 
   componentDidMount = () => this._focus(this.props.focused);
@@ -152,7 +161,7 @@ export default class CreditCardInput extends Component {
     const {
       inputContainerStyle,
       allowScroll, requiresName, requiresCVC, requiresPostalCode,
-      status, invalidMessage,
+      status, invalidMessage, hasTapPayError,
     } = this.props;
 
     return (
@@ -169,7 +178,7 @@ export default class CreditCardInput extends Component {
             <View testID='anchor' style={{position: 'relative', width:'100%', height:0 ,overflow:'visible'}} >
               <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 50, height: 30,}} source={Icons[this._iconToShow()]} />
             </View>
-            {status['number'] === "invalid" && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.number}</Text>}
+            {(status['number'] === "invalid" || hasTapPayError.number) && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.number}</Text>}
           <CCInput {...this._inputProps("expiry")}
             keyboardType="numeric"
             containerStyle={[
@@ -180,7 +189,7 @@ export default class CreditCardInput extends Component {
                 borderBottomColor: status['expiry'] === "invalid" ? "#FC6068" : "#E1E3E6" }]
               }
             />
-            {status['expiry'] === "invalid" && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.expiry}</Text>}
+            {(status['expiry'] === "invalid" || hasTapPayError.expiry) && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.expiry}</Text>}
           { requiresCVC &&
             <CCInput {...this._inputProps("cvc")}
               keyboardType="numeric"
@@ -188,7 +197,7 @@ export default class CreditCardInput extends Component {
               <View testID='anchor' style={{position: 'relative', width:'100%', height: 0, overflow: 'visible'}} >
                 <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 50, height: 30,}} source={Icons['cvc']} />
               </View>
-              {status['cvc'] === "invalid" && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.cvc}</Text>}
+              {(status['cvc'] === "invalid" || hasTapPayError.cvc) && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.cvc}</Text>}
           { requiresName &&
             <CCInput {...this._inputProps("name")}
               containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH }]} /> }

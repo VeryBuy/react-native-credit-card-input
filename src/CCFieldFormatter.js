@@ -21,7 +21,6 @@ export default class CCFieldFormatter {
 
   formatValues = (values) => {
     const card = valid.number(values.number).card || FALLBACK_CARD;
-
     return pick({
       type: card.type,
       number: this._formatNumber(values.number, card),
@@ -34,7 +33,10 @@ export default class CCFieldFormatter {
 
   _formatNumber = (number, card) => {
     const numberSanitized = removeNonNumber(number);
-    const maxLength = card.lengths[card.lengths.length - 1];
+
+    // 似乎真的有 18 19 碼的 visa 但先跳過不處理
+    // https://github.com/braintree/credit-card-type/pull/39
+    const maxLength =  card.type === 'visa' ? 16 : card.lengths[card.lengths.length - 1];
     const lengthSanitized = limitLength(numberSanitized, maxLength);
     const formatted = addGaps(lengthSanitized, card.gaps);
     return formatted;
