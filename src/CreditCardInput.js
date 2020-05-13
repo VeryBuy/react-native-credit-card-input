@@ -19,7 +19,7 @@ import { InjectedProps } from "./connectToState";
 const s = StyleSheet.create({
   container: {
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     backgroundColor: 'white'
   },
   form: {
@@ -31,6 +31,7 @@ const s = StyleSheet.create({
   },
   input: {
     height: 50,
+    fontSize: 15,
   },
 });
 
@@ -67,9 +68,9 @@ export default class CreditCardInput extends Component {
     allowScroll: PropTypes.bool,
     additionalInputsProps: PropTypes.objectOf(PropTypes.shape(TextInput.propTypes)),
     hasTapPayError: PropTypes.shape({
-      number: PropTypes.string,
-      expiry: PropTypes.string,
-      cvc: PropTypes.string,
+      number: PropTypes.bool,
+      expiry: PropTypes.bool,
+      cvc: PropTypes.bool,
     }),
   };
 
@@ -176,7 +177,7 @@ export default class CreditCardInput extends Component {
             containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH, borderBottomColor: status['number'] === "invalid" ? "#FC6068" : "#E1E3E6" }]} >
             </CCInput>
             <View testID='anchor' style={{position: 'relative', width:'100%', height:0 ,overflow:'visible'}} >
-              <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 50, height: 30,}} source={Icons[this._iconToShow()]} />
+              <Image style={s.icon,{position: 'absolute',top: -40, right: 30 ,width: 50, height: 30, transform: [{ scale: 0.8 }]}} source={Icons[this._iconToShow()]} />
             </View>
             {(status['number'] === "invalid" || hasTapPayError.number) && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.number}</Text>}
           <CCInput {...this._inputProps("expiry")}
@@ -195,7 +196,7 @@ export default class CreditCardInput extends Component {
               keyboardType="numeric"
               containerStyle={[s.inputContainer, inputContainerStyle, { width: CARD_NUMBER_INPUT_WIDTH, borderBottomColor: status['cvc'] === "invalid" ? "#FC6068" : "white"}]} /> }
               <View testID='anchor' style={{position: 'relative', width:'100%', height: 0, overflow: 'visible'}} >
-                <Image style={s.icon,{position: 'absolute',top: -40, right: 40 ,width: 50, height: 30,}} source={Icons['cvc']} />
+                <Image style={s.icon,{position: 'absolute',top: -40, right: 30 ,width: 50, height: 30, transform: [{ scale: 0.8 }]}} source={Icons['cvc']} />
               </View>
               {(status['cvc'] === "invalid" || hasTapPayError.cvc) && <Text style={{color: '#FC6068',paddingTop: 5}}>{invalidMessage.cvc}</Text>}
           { requiresName &&
